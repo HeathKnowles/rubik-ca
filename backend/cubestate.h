@@ -10,7 +10,7 @@ class CubeState {
 public:
     // Each corner: 3 bits for position, 2 bits for orientation = 5 bits × 8 = 40 bits
     // Each edge: 4 bits for position, 1 bit for orientation = 5 bits × 12 = 60 bits
-    // Total: 100 bits (use two uint64_t to cover this)
+   
 
     uint64_t cornerData;  // Stores all 8 corners (position + orientation)
     uint64_t edgeData;    // Stores all 12 edges (position + orientation)
