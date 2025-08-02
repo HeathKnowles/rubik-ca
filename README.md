@@ -1,36 +1,131 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🧊 Rubik’s Cube Solver & 3D Visualizer
 
-## Getting Started
+A high-performance, interactive Rubik’s Cube solver built with:
 
-First, run the development server:
+* 🧠 **C++**: Fast, memory-efficient solver compiled to WebAssembly
+* 🎮 **React + Three.js**: Interactive 3D visualization of the cube in the browser
+* 🌐 **Emscripten**: Bridge between C++ logic and JavaScript frontend
+
+<br>
+
+---
+
+## 📸 Demo
+ 
+ [Rubiks Solver](https://rubik-ca.vercel.app/)
+
+
+---
+
+## 🚀 Features
+
+* 🔁 Apply scrambles like `"R U R' U'"` via input
+* ⚙️ Real-time solver using a WebAssembly backend (IDA\* with pattern databases)
+* 🎨 Smooth animated 3D cube with twist effects
+* 🧮 Accurate cube state tracking and face rotations
+* ♻️ Reset, scramble, solve — all interactively
+
+---
+
+## 🧰 Tech Stack
+
+| Layer       | Technology                        |
+| ----------- | --------------------------------- |
+| Backend     | C++ (Rubik’s Cube IDA\* solver)   |
+| WebAssembly | Emscripten                        |
+| Frontend    | React, TypeScript                 |
+| 3D Graphics | React Three Fiber, Drei, Three.js |
+| UI          | HTML + CSS (custom styling)       |
+
+---
+
+## 🛠️ Setup Instructions
+
+### 📦 1. Clone the Repository
 
 ```bash
+git clone https://github.com/your-username/rubik-ca.git
+cd rubiks-cube-wasm
+```
+
+### ⚙️ 2. Build the WebAssembly Solver (C++)
+
+> Prerequisites: [Emscripten](https://emscripten.org/docs/getting_started/downloads.html)
+
+```bash
+emcc solver.cpp -O3 \
+  -s WASM=1 \
+  -s EXPORTED_FUNCTIONS="['_solveCube']" \
+  -s EXPORTED_RUNTIME_METHODS="['ccall','cwrap','UTF8ToString','stringToUTF8','lengthBytesUTF8','_malloc','_free']" \
+  -s MODULARIZE=1 \
+  -s 'EXPORT_NAME="SolverModule"' \
+  -o public/solver.js
+```
+
+### 🌐 3. Install Frontend Dependencies
+
+```bash
+bun install
+# or
+npm install
+# or
+yarn install
+```
+
+### ▶️ 4. Start the Development Server
+
+```bash
+bun run dev
+# or
 npm run dev
 # or
 yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Then open [http://localhost:3000](http://localhost:3000) in your browser.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+---
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## 🧩 How It Works
 
-## Learn More
+### 📌 Backend: Cube Solver (C++)
 
-To learn more about Next.js, take a look at the following resources:
+* Represents cube state using edges, corners, and orientations
+* Uses IDA\* search guided by:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+  * Edge orientation
+  * Corner orientation
+  * E-slice position
+* Solver is compiled to WebAssembly for high performance in-browser
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+### 🎥 Frontend: 3D Cube UI
 
-## Deploy on Vercel
+* Uses React Three Fiber (`@react-three/fiber`) for real-time 3D rendering
+* Each **cubie** is an independent mesh with correctly oriented stickers
+* Applies scramble and solution moves via smooth animation
+* Communicates with the WASM module using `malloc`, `_solveCube`, and `UTF8ToString`
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+---
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## 🧪 Example Usage
+
+1. Enter a scramble:
+
+   ```
+   Example:
+   R U R' U'
+   ```
+
+2. Click **"Apply Scramble"** — the cube animates the moves.
+
+3. Click **"Solve & Animate"** — the WASM solver returns a solution which gets applied visually.
+
+4. Click **"Reset Cube"** to go back to solved state.
+
+---
+
+## 📄 License
+
+MIT © 2025 Yash Yashuday
+
+---
